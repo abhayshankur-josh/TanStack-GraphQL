@@ -19,7 +19,7 @@ function RouteComponent() {
   if (error) return 'An error has occurred: ' + error.message
 
   return (
-    <div>
+    <div className='App'>
       <h1>{data.full_name}</h1>
       <p>{data.description}</p>
       <strong>👀 {data.stargazers_count}</strong>{' '}

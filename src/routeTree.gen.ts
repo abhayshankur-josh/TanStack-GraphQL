@@ -11,11 +11,17 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as SpacexImport } from './routes/spacex'
 import { Route as AboutImport } from './routes/about'
 import { Route as IndexImport } from './routes/index'
-import { Route as AdminProfileImport } from './routes/admin/profile'
 
 // Create/Update Routes
+
+const SpacexRoute = SpacexImport.update({
+  id: '/spacex',
+  path: '/spacex',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const AboutRoute = AboutImport.update({
   id: '/about',
@@ -26,12 +32,6 @@ const AboutRoute = AboutImport.update({
 const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const AdminProfileRoute = AdminProfileImport.update({
-  id: '/admin/profile',
-  path: '/admin/profile',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -53,11 +53,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutImport
       parentRoute: typeof rootRoute
     }
-    '/admin/profile': {
-      id: '/admin/profile'
-      path: '/admin/profile'
-      fullPath: '/admin/profile'
-      preLoaderRoute: typeof AdminProfileImport
+    '/spacex': {
+      id: '/spacex'
+      path: '/spacex'
+      fullPath: '/spacex'
+      preLoaderRoute: typeof SpacexImport
       parentRoute: typeof rootRoute
     }
   }
@@ -68,41 +68,41 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/admin/profile': typeof AdminProfileRoute
+  '/spacex': typeof SpacexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/admin/profile': typeof AdminProfileRoute
+  '/spacex': typeof SpacexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/admin/profile': typeof AdminProfileRoute
+  '/spacex': typeof SpacexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/admin/profile'
+  fullPaths: '/' | '/about' | '/spacex'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/admin/profile'
-  id: '__root__' | '/' | '/about' | '/admin/profile'
+  to: '/' | '/about' | '/spacex'
+  id: '__root__' | '/' | '/about' | '/spacex'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
-  AdminProfileRoute: typeof AdminProfileRoute
+  SpacexRoute: typeof SpacexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
-  AdminProfileRoute: AdminProfileRoute,
+  SpacexRoute: SpacexRoute,
 }
 
 export const routeTree = rootRoute
@@ -117,7 +117,7 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/about",
-        "/admin/profile"
+        "/spacex"
       ]
     },
     "/": {
@@ -126,8 +126,8 @@ export const routeTree = rootRoute
     "/about": {
       "filePath": "about.tsx"
     },
-    "/admin/profile": {
-      "filePath": "admin/profile.tsx"
+    "/spacex": {
+      "filePath": "spacex.tsx"
     }
   }
 }
