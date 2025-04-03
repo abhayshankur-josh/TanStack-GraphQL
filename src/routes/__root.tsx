@@ -21,6 +21,9 @@ export const Route = createRootRoute({
             <li className="nav-item">
               <Link className="nav-link" to="/spacex">SpaceX</Link>
             </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/blogs">Blogs</Link>
+            </li>
           </ul>
         </div>
       </div>

@@ -1,41 +1,64 @@
-import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client";
+import { ApolloProvider, ApolloClient, InMemoryCache, HttpLink, ApolloLink } from "@apollo/client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createRouter, RouterProvider } from "@tanstack/react-router";
 import { routeTree } from "./routeTree.gen";
-
-
-const client = new ApolloClient({
-  uri: "https://spacex-production.up.railway.app/",
-  cache: new InMemoryCache()
-});
 
 type Props = {}
 
 // Create a new router instance
 const router = createRouter({
-    routeTree,
-    context: {},
-    defaultPreload: 'intent',
-    scrollRestoration: true,
-    defaultStructuralSharing: true,
-    defaultPreloadStaleTime: 0,
-  })
-  
-  // Register the router instance for type safety
-  declare module '@tanstack/react-router' {
-    interface Register {
-      router: typeof router
-    }
+  routeTree,
+  context: {},
+  defaultPreload: 'intent',
+  scrollRestoration: true,
+  defaultStructuralSharing: true,
+  defaultPreloadStaleTime: 0,
+})
+
+// Register the router instance for type safety
+declare module '@tanstack/react-router' {
+  interface Register {
+    router: typeof router
   }
-  
-  const queryClient = new QueryClient()
+}
+
+const queryClient = new QueryClient()
+
+//Declare your endpoints
+const spacexendpoint = new HttpLink({
+  uri: 'https://spacex-production.up.railway.app/'
+})
+
+const railsendpoint = new HttpLink({
+  uri: 'http://127.0.0.1:3001/graphql',
+})
+
+//pass them to apollo-client config
+const client = new ApolloClient({
+  link: ApolloLink.split(
+      operation => operation.getContext().clientName === 'spacexendpoint',
+      spacexendpoint, //if above 
+      railsendpoint
+  ),
+  cache: new InMemoryCache()
+})
+
+// const client = new ApolloClient({
+//   cache: new InMemoryCache(),
+//   link: new HttpLink({
+//     // uri: "http://127.0.0.1:3001/graphql",
+//     uri: "https://spacex-production.up.railway.app/",
+//     useGETForQueries: true
+//   })
+// });
+
 
 export default function App({}: Props) {
   return (
     <ApolloProvider client={client}>
-        <QueryClientProvider client={queryClient}>
-            <RouterProvider router={router} />
-        </QueryClientProvider>
+    <QueryClientProvider client={queryClient}>
+        <RouterProvider router={router} />
+    </QueryClientProvider>
     </ApolloProvider>
   )
 }

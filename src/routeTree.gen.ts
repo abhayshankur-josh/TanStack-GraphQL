@@ -12,6 +12,7 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as SpacexImport } from './routes/spacex'
+import { Route as BlogsImport } from './routes/blogs'
 import { Route as AboutImport } from './routes/about'
 import { Route as IndexImport } from './routes/index'
 
@@ -20,6 +21,12 @@ import { Route as IndexImport } from './routes/index'
 const SpacexRoute = SpacexImport.update({
   id: '/spacex',
   path: '/spacex',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const BlogsRoute = BlogsImport.update({
+  id: '/blogs',
+  path: '/blogs',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -53,6 +60,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutImport
       parentRoute: typeof rootRoute
     }
+    '/blogs': {
+      id: '/blogs'
+      path: '/blogs'
+      fullPath: '/blogs'
+      preLoaderRoute: typeof BlogsImport
+      parentRoute: typeof rootRoute
+    }
     '/spacex': {
       id: '/spacex'
       path: '/spacex'
@@ -68,12 +82,14 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/blogs': typeof BlogsRoute
   '/spacex': typeof SpacexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/blogs': typeof BlogsRoute
   '/spacex': typeof SpacexRoute
 }
 
@@ -81,27 +97,30 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/blogs': typeof BlogsRoute
   '/spacex': typeof SpacexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/spacex'
+  fullPaths: '/' | '/about' | '/blogs' | '/spacex'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/spacex'
-  id: '__root__' | '/' | '/about' | '/spacex'
+  to: '/' | '/about' | '/blogs' | '/spacex'
+  id: '__root__' | '/' | '/about' | '/blogs' | '/spacex'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  BlogsRoute: typeof BlogsRoute
   SpacexRoute: typeof SpacexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  BlogsRoute: BlogsRoute,
   SpacexRoute: SpacexRoute,
 }
 
@@ -117,6 +136,7 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/about",
+        "/blogs",
         "/spacex"
       ]
     },
@@ -125,6 +145,9 @@ export const routeTree = rootRoute
     },
     "/about": {
       "filePath": "about.tsx"
+    },
+    "/blogs": {
+      "filePath": "blogs.tsx"
     },
     "/spacex": {
       "filePath": "spacex.tsx"
